@@ -5,7 +5,7 @@ WordPress plugin for Old Catholic Churches International (OCCI).
 Provides a complete canonical sacramental records management system — all six principal sacramental registers stored in MariaDB/MySQL within WordPress.
 
 **Current version:** 1.0.4
-**GitHub repository:** https://github.com/bishopgodsey/OCCI-sacramental-record
+**GitHub repository:** https://github.com/BishopGreer/OCCI-sacramental-record
 **Working directory:** ~/Projects/occi-sacramental-records
 
 ## Versioning Rules
@@ -141,7 +141,7 @@ define( 'OCCI_UPDATE_URL', 'https://myocci.org/updates/occi-sacramental-records.
 
 Option B — GitHub releases:
 ```php
-define( 'OCCI_UPDATE_URL', 'https://github.com/bishopgodsey/OCCI-sacramental-record' );
+define( 'OCCI_UPDATE_URL', 'https://github.com/BishopGreer/OCCI-sacramental-record' );
 define( 'OCCI_UPDATE_SOURCE', 'github' );
 // For private repos: define( 'OCCI_UPDATE_GITHUB_TOKEN', 'your-token' );
 ```
@@ -174,7 +174,7 @@ Every OCCI admin page has a fixed bottom bar:
 ## Initial GitHub Push (one-time setup, not yet completed)
 ```bash
 cd ~/Projects/occi-sacramental-records
-git remote set-url origin https://github.com/bishopgodsey/OCCI-sacramental-record.git
+git remote set-url origin https://github.com/BishopGreer/OCCI-sacramental-record.git
 git push origin main
 git push origin v1.0.4
 ```
