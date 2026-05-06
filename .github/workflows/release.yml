@@ -56,25 +56,3 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: Update self-hosted update JSON (optional)
-        # Only runs if OCCI_UPDATE_JSON_PATH secret is set.
-        # Set this secret to the server path of your update JSON if using self-hosted updates.
-        if: ${{ secrets.OCCI_UPDATE_JSON_PATH != '' }}
-        run: |
-          VERSION=${{ steps.version.outputs.VERSION }}
-          ZIPNAME="occi-sacramental-records-${VERSION}.zip"
-          DOWNLOAD_URL="https://github.com/${{ github.repository }}/releases/download/v${VERSION}/${ZIPNAME}"
-          cat > update.json << JSON
-          {
-            "version": "${VERSION}",
-            "download_url": "${DOWNLOAD_URL}",
-            "requires": "6.0",
-            "requires_php": "8.0",
-            "tested": "6.8",
-            "last_updated": "$(date +%Y-%m-%d)",
-            "changelog": "$(grep -A20 "= ${VERSION} =" readme.txt | tail -n +2 | head -20 | tr '\n' ' ')"
-          }
-          JSON
-          echo "Update JSON generated at update.json"
-          # To deploy this to myocci.org, add an SSH deploy step here using
-          # secrets.DEPLOY_SSH_KEY and secrets.DEPLOY_HOST
