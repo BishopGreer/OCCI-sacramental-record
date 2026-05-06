@@ -3,30 +3,18 @@
  * Plugin Name:       OCCI Sacramental Records
  * Plugin URI:        https://myocci.org
  * Description:       National sacramental record database for Old Catholic Churches International. Manages Baptism, Confirmation, Marriage, Death, First Communion, and Ordination registers.
- * Version:           1.0.4
+ * Version:           1.0.5
  * Requires at least: 6.0
  * Requires PHP:      8.0
  * Author:            Old Catholic Churches International
  * Author URI:        https://myocci.org
  * License:           GPL-2.0-or-later
  * Text Domain:       occi-sacramental-records
- *
- * ----------------------------------------------------------------------------
- * AUTOMATIC UPDATES (optional — configure in wp-config.php)
- * ----------------------------------------------------------------------------
- * Self-hosted (recommended):
- *   define( 'OCCI_UPDATE_URL', 'https://myocci.org/updates/occi-sacramental-records.json' );
- *
- * GitHub releases:
- *   define( 'OCCI_UPDATE_URL',    'https://github.com/YOUR-ORG/occi-sacramental-records' );
- *   define( 'OCCI_UPDATE_SOURCE', 'github' );
- *   define( 'OCCI_UPDATE_GITHUB_TOKEN', 'ghp_...' ); // private repos only
- * ----------------------------------------------------------------------------
  */
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-define( 'OCCI_SR_VERSION',    '1.0.4' );
+define( 'OCCI_SR_VERSION',    '1.0.5' );
 define( 'OCCI_SR_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'OCCI_SR_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
@@ -63,5 +51,5 @@ add_action( 'plugins_loaded', function () {
     OCCI_Certificates::init();
     OCCI_Report::init();
     OCCI_ImportExport::init();
-    OCCI_Updater::init();   // No-op if OCCI_UPDATE_URL is not defined
+    OCCI_Updater::init();
 } );
