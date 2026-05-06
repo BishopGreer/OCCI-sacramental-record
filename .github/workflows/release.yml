@@ -1,0 +1,80 @@
+name: Package and Release Plugin
+
+# Triggers whenever a version tag (e.g. v1.0.4, v1.0.5) is pushed.
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # needed to create releases and upload assets
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+
+      - name: Build plugin ZIP
+        run: |
+          VERSION=${{ steps.version.outputs.VERSION }}
+          ZIPNAME="occi-sacramental-records-${VERSION}.zip"
+          # Package only the plugin files (exclude dev/repo files)
+          zip -r "$ZIPNAME" \
+            occi-sacramental-records.php \
+            readme.txt \
+            includes/ \
+            admin/ \
+            assets/ \
+            --exclude "*.DS_Store" \
+            --exclude "*/.git/*" \
+            --exclude "*/node_modules/*"
+          echo "ZIP_NAME=$ZIPNAME" >> $GITHUB_ENV
+
+      - name: Extract changelog for this version
+        id: changelog
+        run: |
+          VERSION=${{ steps.version.outputs.VERSION }}
+          # Pull the changelog block for this version out of readme.txt
+          NOTES=$(awk "/^= ${VERSION} =/{found=1; next} found && /^= /{exit} found{print}" readme.txt)
+          if [ -z "$NOTES" ]; then NOTES="See readme.txt for details."; fi
+          # Write to file to preserve newlines
+          echo "$NOTES" > release_notes.txt
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "OCCI Sacramental Records v${{ steps.version.outputs.VERSION }}"
+          body_path: release_notes.txt
+          files: ${{ env.ZIP_NAME }}
+          draft: false
+          prerelease: false
+
+      - name: Update self-hosted update JSON (optional)
+        # Only runs if OCCI_UPDATE_JSON_PATH secret is set.
+        # Set this secret to the server path of your update JSON if using self-hosted updates.
+        if: ${{ secrets.OCCI_UPDATE_JSON_PATH != '' }}
+        run: |
+          VERSION=${{ steps.version.outputs.VERSION }}
+          ZIPNAME="occi-sacramental-records-${VERSION}.zip"
+          DOWNLOAD_URL="https://github.com/${{ github.repository }}/releases/download/v${VERSION}/${ZIPNAME}"
+          cat > update.json << JSON
+          {
+            "version": "${VERSION}",
+            "download_url": "${DOWNLOAD_URL}",
+            "requires": "6.0",
+            "requires_php": "8.0",
+            "tested": "6.8",
+            "last_updated": "$(date +%Y-%m-%d)",
+            "changelog": "$(grep -A20 "= ${VERSION} =" readme.txt | tail -n +2 | head -20 | tr '\n' ' ')"
+          }
+          JSON
+          echo "Update JSON generated at update.json"
+          # To deploy this to myocci.org, add an SSH deploy step here using
+          # secrets.DEPLOY_SSH_KEY and secrets.DEPLOY_HOST

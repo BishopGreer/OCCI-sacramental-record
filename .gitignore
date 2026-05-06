@@ -1,0 +1,15 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Build artifacts (the zip is built by GitHub Actions, not committed)
+*.zip
+
+# Local dev
+node_modules/
