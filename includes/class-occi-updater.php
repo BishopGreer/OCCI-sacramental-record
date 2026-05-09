@@ -29,8 +29,14 @@ class OCCI_Updater {
                 'new_version'  => $remote->version,
                 'url'          => $remote->details_url,
                 'package'      => $remote->download_url,
-                'icons'        => [],
-                'banners'      => [],
+                'icons'        => [
+                    '1x'  => OCCI_SR_PLUGIN_URL . 'assets/images/icon-128x128.png',
+                    '2x'  => OCCI_SR_PLUGIN_URL . 'assets/images/icon-256x256.png',
+                ],
+                'banners'      => [
+                    'low'  => OCCI_SR_PLUGIN_URL . 'assets/images/banner-772x250.png',
+                    'high' => OCCI_SR_PLUGIN_URL . 'assets/images/banner-1544x500.png',
+                ],
                 'tested'       => $remote->tested,
                 'requires'     => '6.0',
                 'requires_php' => '8.0',
@@ -66,6 +72,14 @@ class OCCI_Updater {
             'tested'         => $remote->tested,
             'last_updated'   => $remote->last_updated,
             'download_link'  => $remote->download_url,
+            'icons'          => [
+                '1x'  => OCCI_SR_PLUGIN_URL . 'assets/images/icon-128x128.png',
+                '2x'  => OCCI_SR_PLUGIN_URL . 'assets/images/icon-256x256.png',
+            ],
+            'banners'        => [
+                'low'  => OCCI_SR_PLUGIN_URL . 'assets/images/banner-772x250.png',
+                'high' => OCCI_SR_PLUGIN_URL . 'assets/images/banner-1544x500.png',
+            ],
             'sections'       => [
                 'description' => 'National sacramental record database for Old Catholic Churches International.',
                 'changelog'   => $remote->changelog,
