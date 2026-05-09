@@ -25,16 +25,14 @@ jobs:
         run: |
           VERSION=${{ steps.version.outputs.VERSION }}
           ZIPNAME="occi-sacramental-records-${VERSION}.zip"
-          # Package only the plugin files (exclude dev/repo files)
-          zip -r "$ZIPNAME" \
-            occi-sacramental-records.php \
-            readme.txt \
-            includes/ \
-            admin/ \
-            assets/ \
-            --exclude "*.DS_Store" \
-            --exclude "*/.git/*" \
-            --exclude "*/node_modules/*"
+          # WordPress requires the ZIP to contain a single top-level folder
+          # named exactly after the plugin slug (occi-sacramental-records/).
+          mkdir -p occi-sacramental-records
+          cp -r occi-sacramental-records.php readme.txt includes admin assets \
+            occi-sacramental-records/
+          zip -r "$ZIPNAME" occi-sacramental-records/ \
+            --exclude "*.DS_Store"
+          rm -rf occi-sacramental-records
           echo "ZIP_NAME=$ZIPNAME" >> $GITHUB_ENV
 
       - name: Extract changelog for this version
