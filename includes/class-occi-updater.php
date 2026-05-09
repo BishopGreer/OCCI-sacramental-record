@@ -14,6 +14,7 @@ class OCCI_Updater {
         add_filter( 'pre_set_site_transient_update_plugins', [ $instance, 'check_for_update' ] );
         add_filter( 'plugins_api',                           [ $instance, 'plugin_info' ], 20, 3 );
         add_filter( 'upgrader_source_selection',             [ $instance, 'fix_directory_name' ], 10, 4 );
+        add_action( 'admin_init',                            [ __CLASS__, 'maybe_clear_cache' ] );
     }
 
     public function check_for_update( $transient ) {
@@ -159,7 +160,7 @@ class OCCI_Updater {
             </table>
             <?php if ( current_user_can( 'update_plugins' ) ) : ?>
             <p style="margin-top:12px;">
-                <a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=occi-cert-settings&occi_clear_update_cache=1' ), 'occi_clear_update_cache' ) ); ?>"
+                <a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=occi-cert-settings&occi_sr_clear_update_cache=1' ), 'occi_sr_clear_update_cache' ) ); ?>"
                    class="button">Force Update Check Now</a>
             </p>
             <?php endif; ?>
@@ -168,8 +169,8 @@ class OCCI_Updater {
     }
 
     public static function maybe_clear_cache() {
-        if ( ! isset( $_GET['occi_clear_update_cache'] ) ) return;
-        if ( ! check_admin_referer( 'occi_clear_update_cache' ) ) return;
+        if ( ! isset( $_GET['occi_sr_clear_update_cache'] ) ) return;
+        if ( ! check_admin_referer( 'occi_sr_clear_update_cache' ) ) return;
         delete_transient( self::TRANSIENT_KEY );
         delete_site_transient( 'update_plugins' );
         wp_redirect( admin_url( 'admin.php?page=occi-cert-settings&cache_cleared=1' ) );

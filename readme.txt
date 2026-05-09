@@ -4,7 +4,7 @@ Tags: sacramental records, church, old catholic, database, baptism, marriage, or
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 1.0.7
+Stable tag: 1.0.8
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -109,6 +109,11 @@ Yes. Edit any parish record and use the Media Library button to upload a parish-
 Records are matched by name plus sacrament date. Baptisms additionally use date of birth when present, so two people with the same name but different birth dates are never treated as the same individual. Existing records are skipped; new records for known individuals are added normally. Parishes are matched by name, city, and state and created automatically if not found.
 
 == Changelog ==
+
+= 1.0.8 =
+* Fixed "Force Update Check Now" button redirecting to the Parish Register instead of the national register
+* Added missing admin_init hook so the national register handles its own cache-clear request
+* Renamed cache-clear GET parameter and nonce to occi_sr_clear_update_cache to prevent collision when both plugins are installed on the same site
 
 = 1.0.7 =
 * Added plugin banner and icon images for the WordPress update screen
